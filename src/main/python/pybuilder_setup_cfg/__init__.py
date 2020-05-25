@@ -31,8 +31,8 @@ def init1_from_setup_cfg(project):
     config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
     config.read("setup.cfg")
 
-    name = os.environ.get("PYB_SCFG_NAME", config["metadata"]["name"])
-    version = os.environ.get("PYB_SCFG_VERSION", config["metadata"]["version"])
+    name = os.environ.get("PYB_SCFG_NAME", config.get("metadata", "name", fallback=None))
+    version = os.environ.get("PYB_SCFG_VERSION", config.get("metadata", "version", fallback=None))
     if version and version.startswith("file: "):
         version = read_from(version.split(maxsplit=1)[1])
     distutils_commands = list(filter(lambda item: item.strip(), map(
@@ -87,11 +87,11 @@ def init1_from_setup_cfg(project):
     if version:
         project.set_property("version", version)
         # Setting property is not enough
-        project.version = version
+        project.version = project.get_property("version")
 
     if default_task:
-        project.set_property("default_task", default_task)
-        # Setting property is not enough
+        # Setting property is breaking this thing...
+        # project.set_property("default_task", default_task)
         project.default_task = default_task
 
     if distutils_commands:
