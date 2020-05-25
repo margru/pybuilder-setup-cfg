@@ -1,0 +1,7 @@
+*.pyc
+releases
+.idea/
+*.iml
+.pybuilder
+__pycache__
+target
