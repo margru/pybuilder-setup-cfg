@@ -120,7 +120,7 @@ def init1_from_setup_cfg(project):
         project.package_data.update({k: ["/".join(i.split("/")[1:]) for i in v] for k, v in package_data.items()})
 
     try:
-        pytest_coverage_break_build_threshold = float(pytest_coverage_break_build_threshold)
+        pytest_coverage_break_build_threshold = int(pytest_coverage_break_build_threshold)
     except ValueError:
         pytest_coverage_break_build_threshold = None
     if pytest_coverage_break_build_threshold is not None:
