@@ -10,6 +10,8 @@ In your `build.py`:
 use_plugin("pypi:pybuilder_setup_cfg")
 ```
 
+**IMPORTANT** Use this plugin as the first one as it's getting basic data from the `setup.cfg` that may be overwritten/adjusted later on. It may not work properly if not loaded as the first plugin in your project.
+
 The setup_cfg plugin works as an initializer. You do not have to do anything else. 
 
 It reads the following settings from the setup.cfg file (or environment variables) and set project properties accordingly:
@@ -24,4 +26,4 @@ It reads the following settings from the setup.cfg file (or environment variable
 - copy_resources_glob (tool:pybuilder.copy_resources_glob) + adding files from package_data
 - pytest_coverage_break_build_threshold ($PYB_SCFG_PYTEST_COVERAGE_BREAK_BUILD_THRESHOLD, tool:pytest.coverage_break_build_threshold)
     
-Cython-related stuff is not integrated in official PyBuilder, there is a PR #640 for that.
+Cython-related stuff is not integrated in official PyBuilder, there is a PR [#640](https://github.com/pybuilder/pybuilder/pull/640) for that.
