@@ -81,12 +81,18 @@ def init1_from_setup_cfg(project):
 
     if name:
         project.set_property("name", name)
+        # Setting property is not enough
+        project.name = name
 
     if version:
         project.set_property("version", version)
+        # Setting property is not enough
+        project.version = version
 
     if default_task:
         project.set_property("default_task", default_task)
+        # Setting property is not enough
+        project.default_task = default_task
 
     if distutils_commands:
         project.set_property("distutils_commands", distutils_commands)
