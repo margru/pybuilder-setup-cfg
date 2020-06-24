@@ -121,7 +121,7 @@ def init1_from_setup_cfg(project):
 
     try:
         pytest_coverage_break_build_threshold = int(pytest_coverage_break_build_threshold)
-    except ValueError:
+    except (ValueError, TypeError):
         pytest_coverage_break_build_threshold = None
     if pytest_coverage_break_build_threshold is not None:
         project.set_property("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
