@@ -26,10 +26,11 @@ def init_setup_cfg_plugin(project, logger):
 
 
 @init
-def init1_from_setup_cfg(project):
+def init1_from_setup_cfg(project, logger):
 
     config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
     config.read("setup.cfg")
+    logger.debug("setup_cfg plugin: Loaded setup.cfg")
 
     name = os.environ.get("PYB_SCFG_NAME", config.get("metadata", "name", fallback=None))
     version = os.environ.get("PYB_SCFG_VERSION", config.get("metadata", "version", fallback=None))
@@ -83,23 +84,28 @@ def init1_from_setup_cfg(project):
         project.set_property("name", name)
         # Setting property is not enough
         project.name = name
+        logger.debug("setup_cfg plugin: Name set to: {}".format(name))
 
     if version:
         project.set_property("version", version)
         # Setting property is not enough
         project.version = project.get_property("version")
+        logger.debug("setup_cfg plugin: Version set to: {}".format(version))
 
     if default_task:
         # Setting property is breaking this thing...
         # project.set_property("default_task", default_task)
         project.default_task = default_task
+        logger.debug("setup_cfg plugin: Default task set to: {}".format(default_task))
 
     if distutils_commands:
         project.set_property("distutils_commands", distutils_commands)
+        logger.debug("setup_cfg plugin: Distutils commands set to: {}".format(distutils_commands))
 
     # TWINE_REPOSITORY_URL environment variable is preferred
     if os.environ.get("TWINE_REPOSITORY_URL") is None and distutils_upload_repository is not None:
         project.set_property("distutils_upload_repository", distutils_upload_repository)
+        logger.debug("setup_cfg plugin: Upload repository set to: {}".format(distutils_upload_repository))
 
     if len(cython_include_modules):
         # Cython extension modules definition
@@ -107,17 +113,22 @@ def init1_from_setup_cfg(project):
             "module_list": cython_include_modules,
             "exclude": cython_exclude_modules,
         }])
+        logger.debug("setup_cfg plugin: Included cython modules: {}".format(cython_include_modules))
+        logger.debug("setup_cfg plugin: Excluded cython modules: {}".format(cython_exclude_modules))
 
     if cython_remove_python_sources:
         # Remove the original Python source files from the distribution
         project.set_property("distutils_cython_remove_python_sources", cython_remove_python_sources)
+        logger.debug("setup_cfg plugin: Remove python sources when cythonized: {}".format(cython_remove_python_sources))
 
     if copy_resources_glob:
         project.set_property("copy_resources_glob", copy_resources_glob + reduce(operator.concat, package_data.values(), []))
+        logger.debug("setup_cfg plugin: Configured resource copying glob")
 
     if package_data:
         # The files pattern MUST NOT contain the package name and MUST use '/' as a path separator
         project.package_data.update({k: ["/".join(i.split("/")[1:]) for i in v] for k, v in package_data.items()})
+        logger.debug("setup_cfg plugin: Added some package data")
 
     try:
         pytest_coverage_break_build_threshold = int(pytest_coverage_break_build_threshold)
