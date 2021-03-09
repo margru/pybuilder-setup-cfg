@@ -25,5 +25,7 @@ It reads the following settings from the setup.cfg file (or environment variable
 - distutils_cython_remove_python_sources (tool:pybuilder.cython_remove_python_sources)
 - copy_resources_glob (tool:pybuilder.copy_resources_glob) + adding files from package_data
 - pytest_coverage_break_build_threshold ($PYB_SCFG_PYTEST_COVERAGE_BREAK_BUILD_THRESHOLD, tool:pytest.coverage_break_build_threshold)
+- pytest_coverage_html (tool:pytest.coverage_html)
+- pytest_coverage_annotate (tool:pytest.coverage_annotate)
     
 Cython-related stuff is not integrated in official PyBuilder, there is a PR [#640](https://github.com/pybuilder/pybuilder/pull/640) for that.

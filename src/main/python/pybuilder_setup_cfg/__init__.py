@@ -68,6 +68,12 @@ def init1_from_setup_cfg(project, logger):
         "PYB_SCFG_PYTEST_COVERAGE_BREAK_BUILD_THRESHOLD",
         config.get("tool:pytest", "coverage_break_build_threshold", fallback=None)
     )
+    pytest_coverage_html = config.getboolean(
+        "tool:pytest", "coverage_html", fallback=False
+    )
+    pytest_coverage_annotate = config.getboolean(
+        "tool:pytest", "coverage_annotate", fallback=False
+    )
 
     # analyze - Python flake8 linting
     # publish - create distributions (sdist, bdist)
@@ -136,3 +142,10 @@ def init1_from_setup_cfg(project, logger):
         pytest_coverage_break_build_threshold = None
     if pytest_coverage_break_build_threshold is not None:
         project.set_property("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
+        logger.debug("setup_cfg plugin: PyTest coverage break threshold set to {}".format(pytest_coverage_break_build_threshold))
+
+    project.set_property("pytest_coverage_html", pytest_coverage_html)
+    logger.debug("setup_cfg plugin: PyTest coverage HTML set to {}".format(pytest_coverage_html))
+
+    project.set_property("pytest_coverage_annotate", pytest_coverage_annotate)
+    logger.debug("setup_cfg plugin: PyTest coverage annotateL set to {}".format(pytest_coverage_annotate))
