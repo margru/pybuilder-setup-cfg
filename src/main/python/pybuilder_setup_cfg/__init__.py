@@ -29,8 +29,14 @@ def init_setup_cfg_plugin(project, logger):
 def init1_from_setup_cfg(project, logger):
 
     config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-    config.read("setup.cfg")
-    logger.debug("setup_cfg plugin: Loaded setup.cfg")
+    logger.debug(f"setup_cfg plugin: Project basedir: {project.basedir}")
+    setup_filename = os.path.join(project.basedir, "setup.cfg")
+    try:
+        config.read(setup_filename)
+    except Exception:
+        logger.error(f"setup_cfg plugin: setup.cfg not loaded ({setup_filename})")
+    else:
+        logger.info(f"setup_cfg plugin: Loaded configuration from {setup_filename}")
 
     name = os.environ.get("PYB_SCFG_NAME", config.get("metadata", "name", fallback=None))
     version = os.environ.get("PYB_SCFG_VERSION", config.get("metadata", "version", fallback=None))
