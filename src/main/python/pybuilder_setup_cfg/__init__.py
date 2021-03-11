@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import operator
 import os
+import re
 from functools import reduce
 
 import configparser
@@ -53,13 +54,16 @@ def init1_from_setup_cfg(project, logger):
     copy_resources_glob = list(filter(lambda item: item.strip(), map(
         lambda item: item.strip(), config.get("tool:pybuilder", "copy_resources_glob", fallback="").split()
     )))
+    package_data_tuples = [
+        line.strip().split("=", maxsplit=1)
+        for line in config.get("files", "package_data", fallback="").splitlines()
+        if line.strip()
+    ]
+    if not package_data_tuples:
+        package_data_tuples = config.items("options.package_data")
     package_data = dict(map(
-        lambda t: (t[0].strip(), t[1].strip().split()),
-        [
-            line.strip().split("=", maxsplit=1)
-            for line in config.get("files", "package_data", fallback="").splitlines()
-            if line.strip()
-        ]
+        lambda t: (t[0].strip(), re.split(r"\s|,\s*", t[1].strip())),
+        package_data_tuples
     ))
     cython_include_modules = list(filter(lambda item: item.strip(), map(
         lambda item: item.strip(), config.get("tool:pybuilder", "cython_include_modules", fallback="").split()
@@ -134,12 +138,17 @@ def init1_from_setup_cfg(project, logger):
         logger.debug("setup_cfg plugin: Remove python sources when cythonized: {}".format(cython_remove_python_sources))
 
     if copy_resources_glob:
-        project.set_property("copy_resources_glob", copy_resources_glob + reduce(operator.concat, package_data.values(), []))
-        logger.debug("setup_cfg plugin: Configured resource copying glob")
+        package_data.values()
+        # Make the full files paths from the package name and the pattern; replace '.' in the package name with '/'
+        package_data_patterns = [["/".join([k.replace(".", "/"), vi]) for vi in v] for k, v in package_data.items()]
+        logger.debug(f"setup_cfg plugin: package_data_patterns: {package_data_patterns}")
+        project.set_property("copy_resources_glob", copy_resources_glob + reduce(
+            operator.concat, package_data_patterns, [])
+         )
+        logger.debug(f"setup_cfg plugin: Configured resource copying glob: {copy_resources_glob}")
 
     if package_data:
-        # The files pattern MUST NOT contain the package name and MUST use '/' as a path separator
-        project.package_data.update({k: ["/".join(i.split("/")[1:]) for i in v] for k, v in package_data.items()})
+        project.package_data.update(package_data.items())
         logger.debug("setup_cfg plugin: Added some package data")
 
     try:
