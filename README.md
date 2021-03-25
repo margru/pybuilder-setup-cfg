@@ -1,6 +1,6 @@
 # PyBuilder setup.cfg plugin
 
-[PyBuilder](http://pybuilder.github.io/) plugin for getting various information from the setup.cfg file.
+[PyBuilder](http://pybuilder.github.io/) plugin for getting various information from the setup.cfg file. Tested for PyBuilder version 0.11.X.
 
 ## How to use it
 
@@ -15,7 +15,6 @@ use_plugin("pypi:pybuilder_setup_cfg")
 The setup_cfg plugin works as an initializer. You do not have to do anything else. 
 
 It reads the following settings from the setup.cfg file (or from environment variables) and set project properties accordingly:
-- **PROPERTY_NAME ($ENV_VAR_NAME _if applicable_, [SECTION_IN_SETUP_CFG].OPTION)**
 - name
   - envvar: PYB_SCFG_NAME
   - section: metadata
@@ -25,9 +24,9 @@ It reads the following settings from the setup.cfg file (or from environment var
     - section: metadata
     - option: name
 - package_data
-    - section: options.package_data (standard location)
-      
-        OR
+    - section: options.package_data (standard location and format)
+
+      OR
 
     - section: files
     - option: package_data
@@ -45,7 +44,7 @@ It reads the following settings from the setup.cfg file (or from environment var
     - envvar: PYB_SCFG_UPLOAD_REPOSITORY
     - section: tool:pybuilder
     - option: distutils_upload_repository
-    - note: if environment variable `TWINE_REPOSITORY_URL` is set, it will be used anyway and the `distutils_upload_repository` will be ignored
+    - note: if environment variable `TWINE_REPOSITORY_URL` is set, it will be used anyway and the _distutils_upload_repository_ will be ignored
 - distutils_cython_ext_modules (*)
     - section: tool:pybuilder
     - option: cython_include_modules AND cython_exclude_modules
