@@ -59,7 +59,7 @@ def init1_from_setup_cfg(project, logger):
         for line in config.get("files", "package_data", fallback="").splitlines()
         if line.strip()
     ]
-    if not package_data_tuples:
+    if not package_data_tuples and config.has_section("options.package_data"):
         package_data_tuples = config.items("options.package_data")
     package_data = dict(map(
         lambda t: (t[0].strip(), re.split(r"\s|,\s*", t[1].strip())),
