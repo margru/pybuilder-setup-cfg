@@ -54,6 +54,7 @@ def init1_from_setup_cfg(project, logger):
     copy_resources_glob = list(filter(lambda item: item.strip(), map(
         lambda item: item.strip(), config.get("tool:pybuilder", "copy_resources_glob", fallback="").split()
     )))
+
     package_data_tuples = [
         line.strip().split("=", maxsplit=1)
         for line in config.get("files", "package_data", fallback="").splitlines()
@@ -65,6 +66,7 @@ def init1_from_setup_cfg(project, logger):
         lambda t: (t[0].strip(), re.split(r"\s|,\s*", t[1].strip())),
         package_data_tuples
     ))
+
     cython_include_modules = list(filter(lambda item: item.strip(), map(
         lambda item: item.strip(), config.get("tool:pybuilder", "cython_include_modules", fallback="").split()
     )))
@@ -74,16 +76,17 @@ def init1_from_setup_cfg(project, logger):
     cython_remove_python_sources = config.getboolean(
         "tool:pybuilder", "cython_remove_python_sources", fallback=False
     )
+
+    coverage_break_build_from_cfg = config.get("coverage:report", "fail_under", fallback=None)
+    if coverage_break_build_from_cfg is None:
+        coverage_break_build_from_cfg = config.get("tool:pytest", "coverage_break_build_threshold", fallback=None)
     pytest_coverage_break_build_threshold = os.environ.get(
         "PYB_SCFG_PYTEST_COVERAGE_BREAK_BUILD_THRESHOLD",
-        config.get("tool:pytest", "coverage_break_build_threshold", fallback=None)
+        coverage_break_build_from_cfg
     )
-    pytest_coverage_html = config.getboolean(
-        "tool:pytest", "coverage_html", fallback=False
-    )
-    pytest_coverage_annotate = config.getboolean(
-        "tool:pytest", "coverage_annotate", fallback=False
-    )
+
+    pytest_coverage_html = config.getboolean("tool:pytest", "coverage_html", fallback=False)
+    pytest_coverage_annotate = config.getboolean("tool:pytest", "coverage_annotate", fallback=False)
 
     # analyze - Python flake8 linting
     # publish - create distributions (sdist, bdist)
