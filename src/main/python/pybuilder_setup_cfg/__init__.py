@@ -118,17 +118,17 @@ def init1_from_setup_cfg(project, logger):
         logger.debug("setup_cfg plugin: Default task set to: {}".format(default_task))
 
     if distutils_commands:
-        project.set_property("distutils_commands", distutils_commands)
+        project.set_property_if_unset("distutils_commands", distutils_commands)
         logger.debug("setup_cfg plugin: Distutils commands set to: {}".format(distutils_commands))
 
     # TWINE_REPOSITORY_URL environment variable is preferred
     if os.environ.get("TWINE_REPOSITORY_URL") is None and distutils_upload_repository is not None:
-        project.set_property("distutils_upload_repository", distutils_upload_repository)
+        project.set_property_if_unset("distutils_upload_repository", distutils_upload_repository)
         logger.debug("setup_cfg plugin: Upload repository set to: {}".format(distutils_upload_repository))
 
     if len(cython_include_modules):
         # Cython extension modules definition
-        project.set_property("distutils_cython_ext_modules", [{
+        project.set_property_if_unset("distutils_cython_ext_modules", [{
             "module_list": cython_include_modules,
             "exclude": cython_exclude_modules,
         }])
@@ -137,7 +137,7 @@ def init1_from_setup_cfg(project, logger):
 
     if cython_remove_python_sources:
         # Remove the original Python source files from the distribution
-        project.set_property("distutils_cython_remove_python_sources", cython_remove_python_sources)
+        project.set_property_if_unset("distutils_cython_remove_python_sources", cython_remove_python_sources)
         logger.debug("setup_cfg plugin: Remove python sources when cythonized: {}".format(cython_remove_python_sources))
 
     if copy_resources_glob:
@@ -145,7 +145,7 @@ def init1_from_setup_cfg(project, logger):
         # Make the full files paths from the package name and the pattern; replace '.' in the package name with '/'
         package_data_patterns = [["/".join([k.replace(".", "/"), vi]) for vi in v] for k, v in package_data.items()]
         logger.debug(f"setup_cfg plugin: package_data_patterns: {package_data_patterns}")
-        project.set_property("copy_resources_glob", copy_resources_glob + reduce(
+        project.set_property_if_unset("copy_resources_glob", copy_resources_glob + reduce(
             operator.concat, package_data_patterns, [])
          )
         logger.debug(f"setup_cfg plugin: Configured resource copying glob: {copy_resources_glob}")
@@ -159,11 +159,11 @@ def init1_from_setup_cfg(project, logger):
     except (ValueError, TypeError):
         pytest_coverage_break_build_threshold = None
     if pytest_coverage_break_build_threshold is not None:
-        project.set_property("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
+        project.set_property_if_unset("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
         logger.debug("setup_cfg plugin: PyTest coverage break threshold set to {}".format(pytest_coverage_break_build_threshold))
 
-    project.set_property("pytest_coverage_html", pytest_coverage_html)
+    project.set_property_if_unset("pytest_coverage_html", pytest_coverage_html)
     logger.debug("setup_cfg plugin: PyTest coverage HTML set to {}".format(pytest_coverage_html))
 
-    project.set_property("pytest_coverage_annotate", pytest_coverage_annotate)
+    project.set_property_if_unset("pytest_coverage_annotate", pytest_coverage_annotate)
     logger.debug("setup_cfg plugin: PyTest coverage annotateL set to {}".format(pytest_coverage_annotate))
