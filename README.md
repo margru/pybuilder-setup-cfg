@@ -73,5 +73,13 @@ It reads the following settings from the setup.cfg file (or from environment var
   - description: possible values: True | False
   - section: tool:pytest
   - option: coverage_annotate
+- scm_ver_version_scheme
+  - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
+  - section: tool:setuptools_scm
+  - option: version_scheme
+- scm_ver_local_scheme
+  - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
+  - section: tool:setuptools_scm
+  - option: local_scheme
 
 (*) Cython-related stuff is not integrated in official PyBuilder, there is a PR [#640](https://github.com/pybuilder/pybuilder/pull/640) for that.
