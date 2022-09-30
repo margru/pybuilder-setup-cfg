@@ -88,6 +88,11 @@ def init1_from_setup_cfg(project, logger):
     pytest_coverage_html = config.getboolean("tool:pytest", "coverage_html", fallback=False)
     pytest_coverage_annotate = config.getboolean("tool:pytest", "coverage_annotate", fallback=False)
 
+    scm_ver_version_scheme = config.get("tool:setuptools_scm", "version_scheme", fallback=None)
+    scm_ver_version_scheme = os.environ.get("PYB_SCFG_SCM_VERSION_SCHEME", scm_ver_version_scheme)
+    scm_ver_local_scheme = config.get("tool:setuptools_scm", "local_scheme", fallback=None)
+    scm_ver_local_scheme = os.environ.get("PYB_SCFG_SCM_VERSION_SCHEME", scm_ver_local_scheme)
+
     # analyze - Python flake8 linting
     # publish - create distributions (sdist, bdist)
     # upload - upload to the PyPI server
@@ -161,6 +166,14 @@ def init1_from_setup_cfg(project, logger):
     if pytest_coverage_break_build_threshold is not None:
         project.set_property_if_unset("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
         logger.debug("setup_cfg plugin: PyTest coverage break threshold set to {}".format(pytest_coverage_break_build_threshold))
+
+    if scm_ver_version_scheme:
+        project.set_property_if_unset("scm_ver_version_scheme", scm_ver_version_scheme)
+        logger.debug("setup_cfg plugin: SCM version scheme set to {}".format(scm_ver_version_scheme))
+
+    if scm_ver_local_scheme:
+        project.set_property_if_unset("scm_ver_local_scheme", scm_ver_local_scheme)
+        logger.debug("setup_cfg plugin: SCM local scheme set to {}".format(scm_ver_local_scheme))
 
     project.set_property_if_unset("pytest_coverage_html", pytest_coverage_html)
     logger.debug("setup_cfg plugin: PyTest coverage HTML set to {}".format(pytest_coverage_html))
