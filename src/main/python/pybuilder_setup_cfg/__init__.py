@@ -76,6 +76,10 @@ def init1_from_setup_cfg(project, logger):
     cython_remove_python_sources = config.getboolean(
         "tool:pybuilder", "cython_remove_python_sources", fallback=False
     )
+    if config.has_section("tool:pybuilder.cython_compiler_directives"):
+        cython_compiler_directives = dict(config.items("tool:pybuilder.cython_compiler_directives"))
+    else:
+        cython_compiler_directives = {}
 
     coverage_break_build_from_cfg = config.get("coverage:report", "fail_under", fallback=None)
     if coverage_break_build_from_cfg is None:
@@ -144,7 +148,9 @@ def init1_from_setup_cfg(project, logger):
         # Remove the original Python source files from the distribution
         project.set_property_if_unset("distutils_cython_remove_python_sources", cython_remove_python_sources)
         logger.debug("setup_cfg plugin: Remove python sources when cythonized: {}".format(cython_remove_python_sources))
-
+    if cython_compiler_directives:
+        project.set_property_if_unset("distutils_cython_compiler_directives", cython_compiler_directives)
+        logger.debug("setup_cfg plugin: Set cython compiler directives: {}".format(cython_compiler_directives))
     if copy_resources_glob:
         package_data.values()
         # Make the full files paths from the package name and the pattern; replace '.' in the package name with '/'
