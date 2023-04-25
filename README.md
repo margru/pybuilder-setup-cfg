@@ -52,6 +52,10 @@ It reads the following settings from the setup.cfg file (or from environment var
 - distutils_cython_remove_python_sources (*)
   - section: tool:pybuilder
   - option: cython_remove_python_sources
+- distutils_cython_compiler_directives
+  - section: tool:pybuilder.cython_compiler_directives
+  - description: section items will be passed to cythonize
+    as compiler_directives dictionary
 - copy_resources_glob
   - section: tool:pybuilder
   - option: copy_resources_glob
