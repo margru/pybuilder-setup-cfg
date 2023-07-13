@@ -85,5 +85,13 @@ It reads the following settings from the setup.cfg file (or from environment var
   - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
   - section: tool:setuptools_scm
   - option: local_scheme
+- scm_ver_root
+  - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
+  - section: tool:setuptools_scm
+  - option: root
+- scm_ver_relative_to
+  - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
+  - section: tool:setuptools_scm
+  - option:relative_to
 
 (*) Cython-related stuff is not integrated in official PyBuilder, there is a PR [#640](https://github.com/pybuilder/pybuilder/pull/640) for that.

@@ -96,6 +96,10 @@ def init1_from_setup_cfg(project, logger):
     scm_ver_version_scheme = os.environ.get("PYB_SCFG_SCM_VERSION_SCHEME", scm_ver_version_scheme)
     scm_ver_local_scheme = config.get("tool:setuptools_scm", "local_scheme", fallback=None)
     scm_ver_local_scheme = os.environ.get("PYB_SCFG_SCM_VERSION_SCHEME", scm_ver_local_scheme)
+    scm_ver_root = config.get("tool:setuptools_scm", "root", fallback=None)
+    scm_ver_root = os.environ.get("PYB_SCFG_SCM_ROOT", scm_ver_root)
+    scm_ver_relative_to = config.get("tool:setuptools_scm", "relative_to", fallback=None)
+    scm_ver_relative_to = os.environ.get("PYB_SCFG_SCM_RELATIVE_TO", scm_ver_relative_to)
 
     # analyze - Python flake8 linting
     # publish - create distributions (sdist, bdist)
@@ -175,11 +179,19 @@ def init1_from_setup_cfg(project, logger):
 
     if scm_ver_version_scheme:
         project.set_property_if_unset("scm_ver_version_scheme", scm_ver_version_scheme)
-        logger.debug("setup_cfg plugin: SCM version scheme set to {}".format(scm_ver_version_scheme))
+        logger.debug("setup_cfg plugin: SCM version_scheme set to {}".format(scm_ver_version_scheme))
 
     if scm_ver_local_scheme:
         project.set_property_if_unset("scm_ver_local_scheme", scm_ver_local_scheme)
-        logger.debug("setup_cfg plugin: SCM local scheme set to {}".format(scm_ver_local_scheme))
+        logger.debug("setup_cfg plugin: SCM local_scheme set to {}".format(scm_ver_local_scheme))
+
+    if scm_ver_root:
+        project.set_property_if_unset("scm_ver_root", scm_ver_root)
+        logger.debug("setup_cfg plugin: SCM root set to {}".format(scm_ver_root))
+
+    if scm_ver_relative_to:
+        project.set_property_if_unset("scm_ver_relative_to", scm_ver_relative_to)
+        logger.debug("setup_cfg plugin: SCM relative_to set to {}".format(scm_ver_relative_to))
 
     project.set_property_if_unset("pytest_coverage_html", pytest_coverage_html)
     logger.debug("setup_cfg plugin: PyTest coverage HTML set to {}".format(pytest_coverage_html))
