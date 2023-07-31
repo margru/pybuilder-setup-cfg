@@ -77,6 +77,14 @@ It reads the following settings from the setup.cfg file (or from environment var
   - description: possible values: True | False
   - section: tool:pytest
   - option: coverage_annotate
+- docstr_coverage_config
+  - description: to be used by _pybuilder-docstr-coverage_ plugin; path to docstr-coverage config file
+  - section: tool:docstr_coverage
+  - option: config
+- docstr_coverage_fail_under
+  - description: to be used by _pybuilder-docstr-coverage_ plugin; build will fail if docstr coverage is lower than this
+  - section: tool:docstr_coverage
+  - option: fail_under
 - scm_ver_version_scheme
   - description: to be used by _pybuilder-scm-ver-plugin_; possible values: see _setuptools_scm_ package
   - section: tool:setuptools_scm
