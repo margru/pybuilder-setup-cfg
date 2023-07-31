@@ -92,6 +92,9 @@ def init1_from_setup_cfg(project, logger):
     pytest_coverage_html = config.getboolean("tool:pytest", "coverage_html", fallback=False)
     pytest_coverage_annotate = config.getboolean("tool:pytest", "coverage_annotate", fallback=False)
 
+    docstr_coverage_config = config.get("tool:docstr_coverage", "config", fallback=None)
+    docstr_coverage_fail_under = config.get("tool:docstr_coverage", "fail_under", fallback=None)
+
     scm_ver_version_scheme = config.get("tool:setuptools_scm", "version_scheme", fallback=None)
     scm_ver_version_scheme = os.environ.get("PYB_SCFG_SCM_VERSION_SCHEME", scm_ver_version_scheme)
     scm_ver_local_scheme = config.get("tool:setuptools_scm", "local_scheme", fallback=None)
@@ -176,6 +179,18 @@ def init1_from_setup_cfg(project, logger):
     if pytest_coverage_break_build_threshold is not None:
         project.set_property_if_unset("pytest_coverage_break_build_threshold", pytest_coverage_break_build_threshold)
         logger.debug("setup_cfg plugin: PyTest coverage break threshold set to {}".format(pytest_coverage_break_build_threshold))
+
+    try:
+        docstr_coverage_fail_under = int(docstr_coverage_fail_under)
+    except (ValueError, TypeError):
+        docstr_coverage_fail_under = None
+    if docstr_coverage_fail_under is not None:
+        project.set_property_if_unset("docstr_coverage_fail_under", docstr_coverage_fail_under)
+        logger.debug("setup_cfg plugin: Docstring coverage fail under set to {}".format(docstr_coverage_fail_under))
+
+    if docstr_coverage_config:
+        project.set_property_if_unset("docstr_coverage_config", docstr_coverage_config)
+        logger.debug("setup_cfg plugin: Docstring coverage config set to {}".format(docstr_coverage_config))
 
     if scm_ver_version_scheme:
         project.set_property_if_unset("scm_ver_version_scheme", scm_ver_version_scheme)
