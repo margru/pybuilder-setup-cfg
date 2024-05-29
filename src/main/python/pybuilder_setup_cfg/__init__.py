@@ -147,6 +147,7 @@ def init1_from_setup_cfg(project, logger):
         project.set_property_if_unset("distutils_cython_ext_modules", [{
             "module_list": cython_include_modules,
             "exclude": cython_exclude_modules,
+            "compiler_directives": cython_compiler_directives,
         }])
         logger.debug("setup_cfg plugin: Included cython modules: {}".format(cython_include_modules))
         logger.debug("setup_cfg plugin: Excluded cython modules: {}".format(cython_exclude_modules))
