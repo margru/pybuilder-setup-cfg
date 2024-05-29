@@ -76,6 +76,7 @@ def init1_from_setup_cfg(project, logger):
     cython_remove_python_sources = config.getboolean(
         "tool:pybuilder", "cython_remove_python_sources", fallback=False
     )
+    cython_nthreads = config.getint("tool:pybuilder", "cython_nthreads", fallback=0)
     if config.has_section("tool:pybuilder.cython_compiler_directives"):
         cython_compiler_directives = dict(config.items("tool:pybuilder.cython_compiler_directives"))
     else:
@@ -148,6 +149,7 @@ def init1_from_setup_cfg(project, logger):
             "module_list": cython_include_modules,
             "exclude": cython_exclude_modules,
             "compiler_directives": cython_compiler_directives,
+            "nthreads": cython_nthreads
         }])
         logger.debug("setup_cfg plugin: Included cython modules: {}".format(cython_include_modules))
         logger.debug("setup_cfg plugin: Excluded cython modules: {}".format(cython_exclude_modules))
